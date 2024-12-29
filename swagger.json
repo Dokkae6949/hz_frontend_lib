@@ -1,0 +1,2642 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "hz_server",
+    "description": "Home Zone API",
+    "license": {
+      "name": ""
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/v1/home/": {
+      "post": {
+        "tags": [
+          "Homes"
+        ],
+        "description": "Create a new home",
+        "operationId": "create_home_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Home created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "409": {
+            "description": "Home already exists"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}": {
+      "get": {
+        "tags": [
+          "Homes"
+        ],
+        "description": "Get home info",
+        "operationId": "info_home_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Home info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Homes"
+        ],
+        "description": "Delete a home",
+        "operationId": "delete_home_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Home deleted"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Homes"
+        ],
+        "description": "Update a home",
+        "operationId": "update_home_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Home updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/invite": {
+      "post": {
+        "tags": [
+          "Users",
+          "Invites",
+          "Homes"
+        ],
+        "description": "Creates an invite for a user to join a home. The creator of the invite must be a member of the home.",
+        "operationId": "create_invite_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "The id of the home the invite is for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Invite created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing access token"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/join": {
+      "post": {
+        "tags": [
+          "Homes",
+          "Users"
+        ],
+        "description": "Join a home and return the joined home",
+        "operationId": "join_home_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User joined the home",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "409": {
+            "description": "User is already a member of the home"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/members": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Users"
+        ],
+        "description": "Get all members of a home",
+        "operationId": "members_home_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserPublicResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tags": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Tags"
+        ],
+        "description": "Get all tags in a home",
+        "operationId": "get_tags_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tags found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Homes",
+          "Tags"
+        ],
+        "description": "Create a new tag in a home",
+        "operationId": "create_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Tag created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "409": {
+            "description": "Tag already exists"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tags/{tag_id}": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Tags"
+        ],
+        "description": "Get a tag in a home",
+        "operationId": "get_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Homes",
+          "Tags"
+        ],
+        "description": "Delete a tag in a home",
+        "operationId": "delete_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Homes",
+          "Tags"
+        ],
+        "description": "Update a tag in a home",
+        "operationId": "update_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tag updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "409": {
+            "description": "Tag already exists. Try using a different name"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tags/{tag_id}/tasks": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Tags",
+          "Tasks"
+        ],
+        "description": "Get all tasks of a tag",
+        "operationId": "get_tasks_by_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tasks found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tasks": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Tasks"
+        ],
+        "description": "Get all task",
+        "operationId": "get_tasks_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "with_tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "form",
+            "explode": true,
+            "example": [
+              "Tag 1",
+              "Tag 2"
+            ]
+          },
+          {
+            "name": "with_mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/FilterMode"
+            },
+            "style": "form",
+            "example": "all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tasks found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Homes",
+          "Tasks"
+        ],
+        "description": "Create a new task. If the repetition is set, the task must also have a starting_at and duration set. The ending_at must also be greater or equal to starting_at + duration.",
+        "operationId": "create_task_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Task created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tasks/{task_id}": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Tasks"
+        ],
+        "description": "Get a task",
+        "operationId": "get_task_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "description": "Task ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Homes",
+          "Tasks"
+        ],
+        "description": "Delete a task",
+        "operationId": "delete_task_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "description": "Task ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task deleted"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Task not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Homes",
+          "Tasks"
+        ],
+        "description": "Update a task. If the repetition is set, the task must also have a starting_at and duration set. The ending_at must also be greater or equal to starting_at + duration.",
+        "operationId": "update_task_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "description": "Task ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tasks/{task_id}/tags": {
+      "get": {
+        "tags": [
+          "Homes",
+          "Tasks",
+          "Tags"
+        ],
+        "description": "Get all tags of a task",
+        "operationId": "get_task_tags_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "description": "Task ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tags found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskTagResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Homes",
+          "Tasks",
+          "Tags"
+        ],
+        "description": "Adds an existing tag to a task or creates a new tag and adds it to the task",
+        "operationId": "create_task_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "description": "Task ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Tag added to task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "409": {
+            "description": "Tag already exists"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/home/{home_id}/tasks/{task_id}/tags/{tag_id}": {
+      "delete": {
+        "tags": [
+          "Homes",
+          "Tasks",
+          "Tags"
+        ],
+        "description": "Remove a tag from a task",
+        "operationId": "delete_task_tag_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "description": "Task ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "path",
+            "description": "Tag ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag removed from task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "User is not a member of the home"
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/ping": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "description": "Ping the server",
+        "operationId": "ping_handler",
+        "responses": {
+          "200": {
+            "description": "Server is up"
+          }
+        }
+      }
+    },
+    "/v1/user": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Delete a user",
+        "operationId": "delete_user_handler",
+        "responses": {
+          "200": {
+            "description": "User deleted"
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Invalid access token"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get personal user info",
+        "operationId": "info_user_handler",
+        "responses": {
+          "200": {
+            "description": "User info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid access token"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update a user. Only provided fields will be updated. The rest will be left unchanged.",
+        "operationId": "update_user_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Invalid access token"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "409": {
+            "description": "User already exists"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/homes": {
+      "get": {
+        "tags": [
+          "Users",
+          "Homes"
+        ],
+        "description": "Get all homes the user is part of",
+        "operationId": "joined_homes_handler",
+        "responses": {
+          "200": {
+            "description": "List of homes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HomeResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/homes/{home_id}/leave": {
+      "post": {
+        "tags": [
+          "Users",
+          "Homes"
+        ],
+        "description": "Leave a home",
+        "operationId": "leave_home_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "Home ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User left home"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "404": {
+            "description": "Home not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/invites/": {
+      "get": {
+        "tags": [
+          "Users",
+          "Invites",
+          "Homes"
+        ],
+        "description": "Returns all pending invites of the user.",
+        "operationId": "get_invites_handler",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter invites by status. Pending means the invite is waiting for a response, accepted means the invite was accepted, and declined means the invite was declined.",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/components/schemas/InviteStatus"
+                }
+              ]
+            },
+            "example": "pending"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invites returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InviteResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing access token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/invites/{home_id}": {
+      "get": {
+        "tags": [
+          "Users",
+          "Invites",
+          "Homes"
+        ],
+        "description": "Returns a single invite if the user has an invite from the provided home.",
+        "operationId": "get_invite_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "The id of the home the invite is for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing access token"
+          },
+          "404": {
+            "description": "Invite not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/invites/{home_id}/accept": {
+      "post": {
+        "tags": [
+          "Users",
+          "Invites",
+          "Homes"
+        ],
+        "description": "Accepts an invite to a home. This will add the user to the home.",
+        "operationId": "accept_invite_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "The id of the home the invite is for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite accepted"
+          },
+          "401": {
+            "description": "Invalid or missing access token"
+          },
+          "403": {
+            "description": "Invite is not pending"
+          },
+          "404": {
+            "description": "Invite not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/invites/{home_id}/decline": {
+      "post": {
+        "tags": [
+          "Users",
+          "Invites",
+          "Homes"
+        ],
+        "description": "Declines an invite to a home.",
+        "operationId": "decline_invite_handler",
+        "parameters": [
+          {
+            "name": "home_id",
+            "in": "path",
+            "description": "The id of the home the invite is for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite declined"
+          },
+          "401": {
+            "description": "Invalid or missing access token"
+          },
+          "403": {
+            "description": "Invite is not pending"
+          },
+          "404": {
+            "description": "Invite not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/login": {
+      "post": {
+        "tags": [
+          "Authentication",
+          "Users"
+        ],
+        "description": "Login a user",
+        "operationId": "login_user_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/v1/user/logout": {
+      "post": {
+        "tags": [
+          "Authentication",
+          "Users"
+        ],
+        "description": "Logout a user. Requires an access token, and a refresh token in the headers, where the tokens must belong to the same session.",
+        "operationId": "logout_user_handler",
+        "parameters": [
+          {
+            "name": "all",
+            "in": "query",
+            "description": "Logout from all sessions. By default it will only logout the current session.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "example": "false"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged out"
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Invalid refresh token"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          },
+          {
+            "X-Refresh-Token": []
+          }
+        ]
+      }
+    },
+    "/v1/user/refresh": {
+      "post": {
+        "tags": [
+          "Authentication",
+          "Users"
+        ],
+        "description": "Refresh a user's access token. Requires an access token, and a refresh token in the headers, where the tokens must belong to the same session. The provided tokens will be invalidated.",
+        "operationId": "refresh_user_handler",
+        "responses": {
+          "200": {
+            "description": "User refreshed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "401": {
+            "description": "Invalid refresh or access token"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          },
+          {
+            "X-Refresh-Token": []
+          }
+        ]
+      }
+    },
+    "/v1/user/register": {
+      "post": {
+        "tags": [
+          "Authentication",
+          "Users"
+        ],
+        "description": "Register a new user",
+        "operationId": "register_user_handler",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing body"
+          },
+          "409": {
+            "description": "User already exists"
+          },
+          "422": {
+            "description": "Invalid values"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/v1/user/tasks": {
+      "get": {
+        "tags": [
+          "Users",
+          "Tasks",
+          "Homes"
+        ],
+        "description": "Get all tasks from all homes the user is part of,",
+        "operationId": "get_user_tasks_handler",
+        "responses": {
+          "200": {
+            "description": "Tasks returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing access token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{user_id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get public info of another user",
+        "operationId": "info_public_user_handler",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "User ID of the user to get info for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublicResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FilterMode": {
+        "type": "string",
+        "enum": [
+          "any",
+          "all"
+        ]
+      },
+      "HomeCreationRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My Home",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        }
+      },
+      "HomeResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "My Home"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "HomeUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "My Home",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        }
+      },
+      "InviteCreationRequest": {
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "InviteResponse": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "home_id",
+          "status",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "home_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/InviteStatus"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "InviteStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "accepted",
+          "declined"
+        ]
+      },
+      "Priority": {
+        "type": "string",
+        "enum": [
+          "low",
+          "normal",
+          "high"
+        ]
+      },
+      "Tag": {
+        "type": "object",
+        "required": [
+          "id",
+          "homeId",
+          "name"
+        ],
+        "properties": {
+          "homeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "TagCreationRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "TagUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "TaskCreationRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "priority"
+        ],
+        "properties": {
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "example": "3600"
+          },
+          "endingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority"
+          },
+          "repetition": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TaskRepetition"
+              }
+            ]
+          },
+          "startingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "TaskRepetition": {
+        "type": "string",
+        "enum": [
+          "daily",
+          "weekly",
+          "monthly",
+          "yearly",
+          "weekdays",
+          "weekends"
+        ]
+      },
+      "TaskResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "homeId",
+          "name",
+          "priority",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "The time limit of a single task cycle once it started in seconds."
+          },
+          "endingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "The time at which the task and its repetitions will end."
+          },
+          "homeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority"
+          },
+          "repetition": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TaskRepetition"
+              }
+            ]
+          },
+          "startingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          }
+        }
+      },
+      "TaskStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "completed",
+          "cancelled"
+        ]
+      },
+      "TaskTagResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "homeId",
+          "taskId",
+          "name"
+        ],
+        "properties": {
+          "homeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "taskId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "TaskUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "example": "3600"
+          },
+          "endingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "priority": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Priority"
+              }
+            ]
+          },
+          "repetition": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TaskRepetition"
+              }
+            ]
+          },
+          "startingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TaskStatus"
+              }
+            ]
+          }
+        }
+      },
+      "UserLoginRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user1234@mail.com",
+            "maxLength": 320,
+            "minLength": 5
+          },
+          "password": {
+            "type": "string",
+            "example": "password1234",
+            "minLength": 1
+          }
+        }
+      },
+      "UserLoginResponse": {
+        "type": "object",
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ],
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "UserPublicResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "username",
+          "createdAt"
+        ],
+        "properties": {
+          "bio": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "username": {
+            "type": "string",
+            "example": "user1234"
+          }
+        }
+      },
+      "UserRegistrationRequest": {
+        "type": "object",
+        "required": [
+          "username",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "bio": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": "string",
+            "example": "user1234@mail.com",
+            "maxLength": 320,
+            "minLength": 5
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "https://example.com/image.jpg",
+            "maxLength": 512
+          },
+          "password": {
+            "type": "string",
+            "example": "password1234",
+            "minLength": 8
+          },
+          "username": {
+            "type": "string",
+            "example": "user1234",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "username",
+          "email",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "bio": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "email": {
+            "type": "string",
+            "example": "user1234@mail.com"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "username": {
+            "type": "string",
+            "example": "user1234"
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "bio": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "user1234@mail.com",
+            "maxLength": 320,
+            "minLength": 5
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "https://example.com/image.jpg",
+            "maxLength": 512
+          },
+          "password": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "password1234",
+            "minLength": 8
+          },
+          "username": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "user1234",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Access token used for accessing non-public endpoints."
+      },
+      "X-Refresh-Token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Refresh-Token",
+        "description": "Refresh token used for managing (refreshing, logout) the current session."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Common",
+      "description": "Common API endpoints."
+    },
+    {
+      "name": "Authentication",
+      "description": "Authentication-related API endpoints."
+    },
+    {
+      "name": "Users",
+      "description": "Endpoints for managing users."
+    },
+    {
+      "name": "Homes",
+      "description": "Endpoints for managing homes."
+    },
+    {
+      "name": "Invites",
+      "description": "Endpoints for managing invites."
+    },
+    {
+      "name": "Tasks",
+      "description": "Endpoints for managing tasks."
+    },
+    {
+      "name": "Tags",
+      "description": "Endpoints for managing tags."
+    }
+  ]
+}
