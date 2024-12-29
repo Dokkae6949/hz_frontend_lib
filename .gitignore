@@ -1,0 +1,6 @@
+.devenv
+
+/node_modules/
+/dist/
+/.direnv/
+/.idea/
